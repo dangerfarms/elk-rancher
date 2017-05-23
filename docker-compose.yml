@@ -31,7 +31,7 @@ services:
       - elasticsearch
 
   kibana:
-    build: wintercircle/kibana:latest
+    image: wintercircle/kibana:latest
     labels:
       role: admin
       io.rancher.scheduler.affinity:host_label: role=admin
@@ -43,7 +43,7 @@ services:
       - elasticsearch
 
   elastalert:
-    image: krizsan/elastalert-docker
+    image: ivankrizsan/elastalert
     labels:
       role: admin
       io.rancher.scheduler.affinity:host_label: role=admin
