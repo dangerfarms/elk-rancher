@@ -79,6 +79,8 @@ volumes:
     driver: rancher-nfs
     external: true
   es-data:
+    driver: 'null'
+    external: true
   logstash-config:
     driver: rancher-nfs
     external: true
