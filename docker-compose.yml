@@ -38,7 +38,7 @@ services:
     ports:
       - "5601"
     volumes:
-      - kibana-config:/usr/share/config
+      - kibana-config:/usr/share/kibana/config
     depends_on:
       - elasticsearch
 
