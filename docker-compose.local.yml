@@ -1,0 +1,67 @@
+version: "2"
+services:
+
+  elasticsearch:
+    image: wintercircle/elasticsearch:latest
+    labels:
+      role: admin
+      io.rancher.scheduler.affinity:host_label: role=admin
+    ports:
+      - "9200"
+      - "9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    volumes:
+      - ./volumes/es-data:/usr/share/elasticsearch/data
+#      - ./volumes/es-config:/usr/share/elasticsearch/config
+
+  logstash:
+    image: wintercircle/logstash:latest
+    labels:
+      role: admin
+      io.rancher.scheduler.affinity:host_label: role=admin
+    ports:
+      - "5044"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    volumes:
+      - ./volumes/logstash-config:/opt/logstash/config
+      - ./volumes/logstash-pipeline:/opt/logstash/pipeline
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: wintercircle/kibana:latest
+    labels:
+      role: admin
+      io.rancher.scheduler.affinity:host_label: role=admin
+    ports:
+      - "5601"
+    volumes:
+      - ./volumes/kibana-config:/usr/share/kibana/config
+    depends_on:
+      - elasticsearch
+
+  elastalert:
+    image: ivankrizsan/elastalert
+    labels:
+      role: admin
+      io.rancher.scheduler.affinity:host_label: role=admin
+    environment:
+      ELASTICSEARCH_HOST: "elasticsearch"
+    volumes:
+      - ./volumes/elastalert-rules:/opt/rules
+      - ./volumes/elastalert-config:/opt/config
+    depends_on:
+      - elasticsearch
+      - mail
+
+  mail:
+    image: catatnight/postfix
+    labels:
+      role: admin
+      io.rancher.scheduler.affinity:host_label: role=admin
+    environment:
+      maildomain: "your.domain.here"
+      smtp_user: "user:password"
+

@@ -1,0 +1,9 @@
+.idea
+
+volumes/elastalert-config/*
+volumes/elastalert-rules/*
+volumes/es-config/*
+volumes/es-data/*
+volumes/kibana-config/*
+volumes/logstash-config/*
+volumes/logstash-pipeline/*
